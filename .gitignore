@@ -1,6 +1,8 @@
 node_modules
 dist
-.env
 *.log
 coverage
 rules.json
+.env
+postman
+.postman

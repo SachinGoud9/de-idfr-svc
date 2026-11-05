@@ -1,6 +1,6 @@
 import { createHash, randomUUID, timingSafeEqual } from "node:crypto";
 import { NextFunction, Request, RequestHandler, Response } from "express";
-import { Logger } from "./logger";
+import { Logger } from "../logger";
 import { TokenError, TokenVerifier } from "./oauth";
 
 declare module "express-serve-static-core" {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { DeidentificationService, ValidationError } from "../src/service";
+import { DeidentificationService, ValidationError } from "../src/service/service";
 import { registerConfigRules } from "../src/config";
 import { out, run, svc } from "./helpers";
 

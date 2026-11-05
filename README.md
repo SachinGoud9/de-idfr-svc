@@ -123,15 +123,18 @@ sharing sensitive data.
 
 ```
 src/
-  types.ts        Rule / Span interfaces
-  rules/          one file per entity; each exports a declarative Rule (regex + optional validate())
-  registry.ts     holds rules, resolves defaults, entity lookup
-  detector.ts     DETECTION: runs rules -> candidate spans -> overlap resolution
-  replacer.ts     REPLACEMENT: spans -> output text (pure, knows nothing about rules)
-  service.ts      input validation + orchestration (single, batch)
-  server.ts       Express routes, middleware order, error mapping
-  middleware.ts   request id, security headers, request log, rate limit, API-key / OAuth auth, JSON-only
-  oauth.ts        OAuth 2.0 access-token (JWT) verification against the provider's published keys
+  service/        domain logic (no HTTP knowledge)
+    types.ts        Rule / Span interfaces
+    rules/          one file per entity; each exports a declarative Rule (regex + optional validate())
+    registry.ts     holds rules, resolves defaults, entity lookup
+    detector.ts     DETECTION: runs rules -> candidate spans -> overlap resolution
+    replacer.ts     REPLACEMENT: spans -> output text (pure, knows nothing about rules)
+    service.ts      input validation + orchestration (single, batch)
+  server/         HTTP layer (imports service/, never the reverse)
+    app.ts          Express app: middleware order, mounts routes, error mapping
+    routes/         one router per endpoint group (health, entities, deidentify), combined in index.ts
+    middleware.ts   request id, security headers, request log, rate limit, API-key / OAuth auth, JSON-only
+    oauth.ts        OAuth 2.0 access-token (JWT) verification against the provider's published keys
   settings.ts     environment variables, validated once at startup
   logger.ts       small text/JSON logger (metadata only, never bodies)
   config.ts       custom rules from JSON

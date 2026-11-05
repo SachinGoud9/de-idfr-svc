@@ -1,8 +1,8 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import type { Server } from "node:http";
 import type { AddressInfo } from "node:net";
-import { createApp, AppOptions } from "../src/server";
-import { DeidentificationService } from "../src/service";
+import { createApp, AppOptions } from "../src/server/app";
+import { DeidentificationService } from "../src/service/service";
 import { createLogger, LogLevel } from "../src/logger";
 
 const servers: Server[] = [];

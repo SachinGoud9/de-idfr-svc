@@ -1,5 +1,5 @@
 import { readFileSync } from "node:fs";
-import { RuleRegistry } from "./registry";
+import { RuleRegistry } from "./service/registry";
 
 export interface CustomRuleConfig {
   entity: string;

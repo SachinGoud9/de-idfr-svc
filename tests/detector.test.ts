@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { resolveOverlaps } from "../src/detector";
-import { replaceSpans } from "../src/replacer";
-import { Span } from "../src/types";
+import { resolveOverlaps } from "../src/service/detector";
+import { replaceSpans } from "../src/service/replacer";
+import { Span } from "../src/service/types";
 
 const span = (start: number, end: number, priority: number, entity = "X"): Span => ({
   start,

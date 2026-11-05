@@ -1,0 +1,12 @@
+{
+  "customRules": [
+    { "entity": "EMPLOYEE_ID", "pattern": "\\bEMP-\\d{6}\\b", "priority": 50 },
+    {
+      "entity": "MRN",
+      "pattern": "MRN:\\s*(\\d+)",
+      "group": 1,
+      "placeholder": "<MRN>",
+      "defaultEnabled": true
+    }
+  ]
+}

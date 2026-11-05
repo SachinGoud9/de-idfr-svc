@@ -9,6 +9,7 @@ import {
   securityHeaders,
 } from "./middleware";
 import { TokenVerifier } from "./oauth";
+import { createRoutes } from "./routes";
 import { DeidentificationService, ValidationError } from "../service/service";
 
 export interface AppOptions {
@@ -41,44 +42,7 @@ export function createApp(service = new DeidentificationService(), options: AppO
   app.use(requireJson());
   app.use(express.json({ limit: options.bodyLimit ?? "2mb" }));
 
-  const body = (req: Request) => {
-    if (typeof req.body !== "object" || req.body === null || Array.isArray(req.body)) {
-      throw new ValidationError("Request body must be a JSON object");
-    }
-    return req.body as Record<string, unknown>;
-  };
-
-  app.get("/health", (_req, res) => res.json({ status: "ok" }));
-
-  app.get("/entities", (_req, res) =>
-    res.json({ supported: service.registry.entities(), default: service.registry.defaultEntities() })
-  );
-
-  app.post("/deidentify", (req, res, next) => {
-    try {
-      const b = body(req);
-      const result = service.deidentify(b.text, { entities: b.entities });
-      logger.info("De-identified text", {
-        requestId: req.id,
-        chars: (b.text as string).length,
-        entitiesFound: Object.values(result.entitiesDetected).reduce((a, n) => a + n, 0),
-      });
-      res.json(result);
-    } catch (e) {
-      next(e);
-    }
-  });
-
-  app.post("/deidentify/batch", (req, res, next) => {
-    try {
-      const b = body(req);
-      const results = service.deidentifyBatch(b.records, { entities: b.entities });
-      logger.info("De-identified batch", { requestId: req.id, records: results.length });
-      res.json({ results });
-    } catch (e) {
-      next(e);
-    }
-  });
+  app.use(createRoutes(service, logger));
 
   app.use((req, res) => {
     res.status(404).json({ error: `No route for ${req.method} ${req.path}`, requestId: req.id });

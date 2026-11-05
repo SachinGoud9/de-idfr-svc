@@ -131,7 +131,8 @@ src/
     replacer.ts     REPLACEMENT: spans -> output text (pure, knows nothing about rules)
     service.ts      input validation + orchestration (single, batch)
   server/         HTTP layer (imports service/, never the reverse)
-    app.ts          Express routes, middleware order, error mapping
+    app.ts          Express app: middleware order, mounts routes, error mapping
+    routes/         one router per endpoint group (health, entities, deidentify), combined in index.ts
     middleware.ts   request id, security headers, request log, rate limit, API-key / OAuth auth, JSON-only
     oauth.ts        OAuth 2.0 access-token (JWT) verification against the provider's published keys
   settings.ts     environment variables, validated once at startup

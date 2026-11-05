@@ -123,26 +123,35 @@ sharing sensitive data.
 
 ```
 src/
-  service/        domain logic (no HTTP knowledge)
-    types.ts        Rule / Span interfaces
-    rules/          one file per entity; each exports a declarative Rule (regex + optional validate())
-    registry.ts     holds rules, resolves defaults, entity lookup
-    detector.ts     DETECTION: runs rules -> candidate spans -> overlap resolution
-    replacer.ts     REPLACEMENT: spans -> output text (pure, knows nothing about rules)
-    service.ts      input validation + orchestration (single, batch)
-  server/         HTTP layer (imports service/, never the reverse)
-    app.ts          Express app: middleware order, mounts routes, error mapping
-    routes/         one router per endpoint group (health, entities, deidentify), combined in index.ts
-    middleware.ts   request id, security headers, request log, rate limit, API-key / OAuth auth, JSON-only
-    oauth.ts        OAuth 2.0 access-token (JWT) verification against the provider's published keys
-  settings.ts     environment variables, validated once at startup
-  logger.ts       small text/JSON logger (metadata only, never bodies)
-  config.ts       custom rules from JSON
-  index.ts        process wiring: .env, settings, graceful shutdown on SIGTERM/SIGINT
+  index.ts          process wiring: .env, settings, graceful shutdown on SIGTERM/SIGINT
+  app.ts            createApp(): middleware order, mounts routes, 404 + error handler
+  config/
+    settings.ts       environment variables, validated once at startup
+    rules-loader.ts   custom rules from JSON
+  routes/           URL -> controller mapping only (health, entities, deidentify)
+  controllers/      HTTP in/out: parse request, call the service, shape the response
+  middleware/       request id, security headers, request log, rate limit, API-key / OAuth auth,
+                    JSON-only, error handler
+  services/
+    deidentification.service.ts   input validation + orchestration (single, batch)
+    token-verifier.service.ts     OAuth 2.0 access-token (JWT) verification against the provider's keys
+  domain/           core engine, pure and framework-free
+    types.ts          Rule / Span interfaces
+    rules/            one file per entity; each exports a declarative Rule (regex + optional validate())
+    registry.ts       holds rules, resolves defaults, entity lookup
+    detector.ts       DETECTION: runs rules -> candidate spans -> overlap resolution
+    replacer.ts       REPLACEMENT: spans -> output text (pure, knows nothing about rules)
+  errors/           ValidationError
+  utils/            logger.ts: small text/JSON logger (metadata only, never bodies)
+  types/            express.d.ts: fields our middleware adds to the request
 tests/
-  rules/          one test file per rule
-  *.test.ts       service, server, settings, detector, fuzz and adversarial-input tests
+  unit/             domain/ (incl. rules/), services/, config/
+  integration/      HTTP-level tests (server, OAuth end to end)
+  helpers/          shared test helpers
 ```
+
+Dependencies point inward: `routes -> controllers -> services -> domain`. `domain/` and `services/`
+never import Express.
 
 Decisions and trade-offs:
 

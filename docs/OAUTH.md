@@ -212,11 +212,11 @@ $p = $token.Split(".")[1].Replace("-","+").Replace("_","/"); $p += "=" * ((4 - $
 ## 5. Automated tests
 
 ```powershell
-npx vitest run tests/oauth.test.ts   # 41 tests, about 2 seconds
+npx vitest run tests/integration/oauth.test.ts   # 41 tests, about 2 seconds
 npm run check                        # typecheck, lint, formatting, all tests with coverage thresholds
 ```
 
-`tests/oauth.test.ts` has three layers:
+`tests/integration/oauth.test.ts` has three layers:
 
 - **Verification rules** (`createTokenVerifier`): valid RS256 and ES256 tokens; expiry and clock drift; `nbf`; issuer and
   audience; forged signatures, tampered payloads, `alg: none`, HMAC, and RSA-key-as-EC-key confusion; malformed tokens;

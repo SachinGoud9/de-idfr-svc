@@ -1,4 +1,4 @@
-import { DeidentificationService } from "../src/service";
+import { DeidentificationService } from "../src/service/service";
 
 export const svc = new DeidentificationService();
 

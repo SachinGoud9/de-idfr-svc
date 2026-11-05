@@ -1,5 +1,5 @@
 import express, { NextFunction, Request, Response } from "express";
-import { Logger, silentLogger } from "./logger";
+import { Logger, silentLogger } from "../logger";
 import {
   authenticate,
   rateLimit,
@@ -9,7 +9,7 @@ import {
   securityHeaders,
 } from "./middleware";
 import { TokenVerifier } from "./oauth";
-import { DeidentificationService, ValidationError } from "./service";
+import { DeidentificationService, ValidationError } from "../service/service";
 
 export interface AppOptions {
   // Where request and error logs go. Defaults to silent so tests and library use stay quiet.

@@ -1,16 +1,16 @@
 import { existsSync } from "node:fs";
-import { createApp } from "./server";
-import { DeidentificationService } from "./service";
-import { createDefaultRegistry } from "./rules";
+import { createApp } from "./server/app";
+import { DeidentificationService } from "./service/service";
+import { createDefaultRegistry } from "./service/rules";
 import { loadConfigFile } from "./config";
 import { createLogger } from "./logger";
 import { loadSettings } from "./settings";
-import { createTokenVerifier } from "./oauth";
+import { createTokenVerifier } from "./server/oauth";
 
-export { DeidentificationService, ValidationError } from "./service";
-export { RuleRegistry } from "./registry";
-export { createDefaultRegistry } from "./rules";
-export { createApp } from "./server";
+export { DeidentificationService, ValidationError } from "./service/service";
+export { RuleRegistry } from "./service/registry";
+export { createDefaultRegistry } from "./service/rules";
+export { createApp } from "./server/app";
 
 function main() {
   // Pick up a local .env file when the running Node supports it (20.12+).
